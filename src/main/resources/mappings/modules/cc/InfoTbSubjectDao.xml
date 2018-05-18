@@ -1,0 +1,131 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.thinkgem.jeesite.modules.cc.dao.InfoTbSubjectDao">
+    
+	<sql id="infoTbSubjectColumns">
+		a.id AS "id",
+		a.name AS "name",
+		a.create_by AS "createBy.id",
+		a.create_date AS "createDate",
+		a.update_by AS "updateBy.id",
+		a.update_date AS "updateDate",
+		a.addr AS "addr",
+		a.subject_type AS "subjectType",
+		a.del_flag AS "delFlag"
+	</sql>
+	
+	<sql id="infoTbSubjectJoins">
+	</sql>
+	
+	<sql id="infoTbSubjectWhere">
+		<where>
+			a.del_flag = #{DEL_FLAG_NORMAL}
+			<if test="name != null and name != ''">
+				AND a.name LIKE 
+					<if test="dbName == 'oracle'">'%'||#{name}||'%'</if>
+					<if test="dbName == 'mssql'">'%'+#{name}+'%'</if>
+					<if test="dbName == 'mysql'">concat('%',#{name},'%')</if>
+			</if>
+			<if test="createBy != null and createBy.id != null and createBy.id != ''">
+				AND a.create_by = #{createBy.id}
+			</if>
+			<if test="beginCreateDate != null and endCreateDate != null and beginCreateDate != '' and endCreateDate != ''">
+				AND a.create_date BETWEEN #{beginCreateDate} AND #{endCreateDate}
+			</if>
+			<if test="updateBy != null and updateBy.id != null and updateBy.id != ''">
+				AND a.update_by = #{updateBy.id}
+			</if>
+			<if test="beginUpdateDate != null and endUpdateDate != null and beginUpdateDate != '' and endUpdateDate != ''">
+				AND a.update_date BETWEEN #{beginUpdateDate} AND #{endUpdateDate}
+			</if>
+			<if test="addr != null and addr != ''">
+				AND a.addr = #{addr}
+			</if>
+		</where>
+	</sql>
+    
+	<select id="get" resultType="InfoTbSubject">
+		SELECT 
+			<include refid="infoTbSubjectColumns"/>
+		FROM info_tb_subject a
+			<include refid="infoTbSubjectJoins"/>
+		WHERE a.id = #{id}
+	</select>
+	
+	<select id="findList" resultType="InfoTbSubject">
+		SELECT 
+			<include refid="infoTbSubjectColumns"/>
+		FROM info_tb_subject a
+			<include refid="infoTbSubjectJoins"/>
+			<include refid="infoTbSubjectWhere"/>
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+				ORDER BY a.update_date DESC
+			</otherwise>
+		</choose>
+	</select>
+	
+	<select id="findAllList" resultType="InfoTbSubject">
+		SELECT 
+			<include refid="infoTbSubjectColumns"/>
+		FROM info_tb_subject a
+			<include refid="infoTbSubjectJoins"/>
+		<where>
+			a.del_flag = #{DEL_FLAG_NORMAL}
+		</where>		
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+				ORDER BY a.update_date DESC
+			</otherwise>
+		</choose>
+	</select>
+	
+	<insert id="insert">
+		INSERT INTO info_tb_subject(
+			id,
+			name,
+			create_by,
+			create_date,
+			update_by,
+			update_date,
+			addr,
+			subject_type,
+			del_flag
+		) VALUES (
+			#{id},
+			#{name},
+			#{createBy.id},
+			#{createDate},
+			#{updateBy.id},
+			#{updateDate},
+			#{addr},
+			#{subjectType},
+			#{delFlag}
+		)
+	</insert>
+	
+	<update id="update">
+		UPDATE info_tb_subject SET 	
+			name = #{name},
+			create_by = #{createBy.id},
+			create_date = #{createDate},
+			update_by = #{updateBy.id},
+			update_date = #{updateDate},
+			addr = #{addr},
+			subject_type = #{subjectType}
+		WHERE id = #{id}
+	</update>
+	
+	<update id="delete">
+		UPDATE info_tb_subject SET 
+			del_flag = #{DEL_FLAG_DELETE}
+		WHERE id = #{id}
+	</update>
+	
+</mapper>
