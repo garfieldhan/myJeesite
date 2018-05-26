@@ -56,9 +56,26 @@ ${columnField?substring(0, columnField?last_index_of(","))}
 			</#if>
 		</#list>
 	</sql>
+<<<<<<< HEAD
 	
 	<#-- 输出字段筛选 -->
 	<sql id="${className}Where">
+=======
+    
+	<select id="get" resultType="${ClassName}">
+		SELECT 
+			<include refid="${className}Columns"/>
+		FROM ${table.name} a
+		<include refid="${className}Joins"/>
+		WHERE a.id = ${"#"}{id}
+	</select>
+	
+	<select id="findList" resultType="${ClassName}">
+		SELECT 
+			<include refid="${className}Columns"/>
+		FROM ${table.name} a
+		<include refid="${className}Joins"/>
+>>>>>>> 12fb63ba9455ceda256f058528ad912edab324da
 		<where>
 			<#if table.delFlagExists>a.del_flag = ${"#"}{DEL_FLAG_NORMAL}</#if>
 			<#list table.columnList as c>
@@ -89,6 +106,7 @@ ${columnField?substring(0, columnField?last_index_of(","))}
 				AND a.${c.name} ${c.queryType} ${"#"}{${c.javaFieldId}}
 					</#if>
 			</if>
+<<<<<<< HEAD
 				<#-- <#elseif c.name != 'del_flag'>
 			<if test="${c.simpleJavaField} != null and ${c.javaFieldId} != ''">
 				AND a.${c.name} = ${"#"}{${c.javaFieldId}}
@@ -112,6 +130,11 @@ ${columnField?substring(0, columnField?last_index_of(","))}
 		FROM ${table.name} a
 			<include refid="${className}Joins"/>
 			<include refid="${className}Where"/>
+=======
+				</#if>
+			</#list>
+		</where>
+>>>>>>> 12fb63ba9455ceda256f058528ad912edab324da
 		<choose>
 			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
 				ORDER BY ${"$"}{page.orderBy}
@@ -134,7 +157,11 @@ ${columnField?substring(0, columnField?last_index_of(","))}
 		SELECT 
 			<include refid="${className}Columns"/>
 		FROM ${table.name} a
+<<<<<<< HEAD
 			<include refid="${className}Joins"/>
+=======
+		<include refid="${className}Joins"/>
+>>>>>>> 12fb63ba9455ceda256f058528ad912edab324da
 		<where>
 			<#if table.delFlagExists>a.del_flag = ${"#"}{DEL_FLAG_NORMAL}</#if>
 		</where>		

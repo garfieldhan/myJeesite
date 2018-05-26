@@ -66,6 +66,7 @@ public class ${ClassName}Controller extends BaseController {
 		model.addAttribute("${className}", ${className});
 		return "${lastPackageName}/${viewPrefix}Form";
 	}
+<<<<<<< HEAD
 	
 	@RequiresPermissions("${permissionPrefix}:view")
 	@RequestMapping(value = "view")
@@ -73,6 +74,8 @@ public class ${ClassName}Controller extends BaseController {
 		model.addAttribute("${className}", ${className});
 		return "${lastPackageName}/${viewPrefix}View";
 	}
+=======
+>>>>>>> 12fb63ba9455ceda256f058528ad912edab324da
 
 	@RequiresPermissions("${permissionPrefix}:edit")
 	@RequestMapping(value = "save")
